@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "name": "scheduler",
+  "version": "1.0.0",
+  "description": "spin pro scheduler, seattle",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nicholas-S/scheduler.git"
+  },
+  "author": "Nicholas Stevenson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nicholas-S/scheduler/issues"
+  },
+  "homepage": "https://github.com/Nicholas-S/scheduler#readme"
+}
