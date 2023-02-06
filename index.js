@@ -1,6 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const router = express.Router();
 const mysql = require('mysql');
 const path = require('path');
 const db = require('./db');
@@ -26,6 +24,16 @@ app.get('/pro', function(req, res)
     res.sendFile(path.join(__dirname, './public/pro.html'));
 });
 
+app.get('/manager/try-login', function(req, res)
+{
+    const number = req.query.SMS;
+    if(db.checkManagerNum(number) == 'valid')
+    {
+        res.sendFile(path.join(__dirname, './public/do-login.html'));
+    } else {
+        res.sendFile(path.join(__dirname, './public/not-rec.html'))
+    }
+});
 
 app.listen(port, () =>
 {
