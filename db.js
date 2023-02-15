@@ -13,7 +13,7 @@ const connection = mysql.createConnection(
 
 function testDbConnection()
 {
-    connection.connect((err) => 
+    connection.connect((err) =>
     {
     if(err)
     {
@@ -26,9 +26,9 @@ function testDbConnection()
 
 function checkManagerNum(number)
 {
-    connection.query('SELECT cell FROM pros', function(err, result, fields)
+    connection.query('SELECT cell FROM managers', function(err, result, fields)
     {
-        if(err) throw err;
+        if(err) throw err; 
         Object.keys(result).forEach(function(key)
         {
             var cell = result[key];

@@ -24,7 +24,29 @@ app.get('/pro', function(req, res)
     res.sendFile(path.join(__dirname, './public/pro.html'));
 });
 
-app.get('/manager/try-login', function(req, res)
+app.get('/manager/try-login/', (req, res) =>
+{
+    const phoneNumber = req.query.SMS;
+    const query = 'SELECT * FROM managers WHERE cell = ?';
+    const escapedPhoneNumber = mysql.escape(phoneNumber);
+    db.connection.query(query, [escapedPhoneNumber], (err, result) =>
+    {
+      if (err)
+      {
+        res.status(500).send(err);
+        return;
+      }
+  
+      if (result.length > 0)
+      {
+        res.sendFile(path.join(__dirname, './public/do-login.html'));
+      } else {
+        res.sendFile(path.join(__dirname, './public/not-rec.html'));
+      }
+    });
+  });
+
+/*app.get('/manager/try-login', function(req, res)
 {
     const number = req.query.SMS;
     if(db.checkManagerNum(number) == 'valid')
@@ -33,7 +55,7 @@ app.get('/manager/try-login', function(req, res)
     } else {
         res.sendFile(path.join(__dirname, './public/not-rec.html'))
     }
-});
+});*/
 
 app.listen(port, () =>
 {
