@@ -1,0 +1,1 @@
+const phoneNumber = document.documentElement.innerHTML.match(/<%= phoneNumber %>(.*)'/)[1];

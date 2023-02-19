@@ -1,3 +1,5 @@
+const ejs = require('ejs');
+const fs = require('fs');
 const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
@@ -9,55 +11,50 @@ app.use(express.static('public'))
 
 db.testDbConnection();
 
-app.get('/', function(req, res)
+app.get('/', (req, res) =>
 {
-    res.sendFile(path.join(__dirname, './public/index.html'));
+  res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
-app.get('/manager', function(req, res)
+app.get('/manager', (req, res) =>
 {
-    res.sendFile(path.join(__dirname, './public/manager.html'));
+  res.sendFile(path.join(__dirname, './public/manager.html'));
 });
 
-app.get('/pro', function(req, res)
+app.get('/pro', (req, res) =>
 {
-    res.sendFile(path.join(__dirname, './public/pro.html'));
+  res.sendFile(path.join(__dirname, './public/pro.html'));
 });
 
 app.get('/manager/try-login/', (req, res) =>
 {
-    const phoneNumber = req.query.SMS;
-    const query = 'SELECT * FROM managers WHERE cell = ?';
-    const escapedPhoneNumber = mysql.escape(phoneNumber);
-    db.connection.query(query, [escapedPhoneNumber], (err, result) =>
+  const phoneNumber = mysql.escape(req.query.SMS);
+  const sql = `SELECT * FROM managers WHERE cell = ${phoneNumber}`;
+  db.connection.query(sql, (err, results) =>
+  {
+    if (err)
     {
-      if (err)
-      {
-        res.status(500).send(err);
-        return;
-      }
-  
-      if (result.length > 0)
-      {
-        res.sendFile(path.join(__dirname, './public/do-login.html'));
-      } else {
-        res.sendFile(path.join(__dirname, './public/not-rec.html'));
-      }
-    });
-  });
-
-/*app.get('/manager/try-login', function(req, res)
-{
-    const number = req.query.SMS;
-    if(db.checkManagerNum(number) == 'valid')
-    {
-        res.sendFile(path.join(__dirname, './public/do-login.html'));
-    } else {
-        res.sendFile(path.join(__dirname, './public/not-rec.html'))
+      console.log('MySQL Error: ' + err.message);
+      return;
     }
-});*/
+    if (results.length > 0)
+    {
+      fs.readFile(__dirname + '/public/do-login.html', 'utf8', (err, html) =>
+      {
+        if (err)
+        {
+          console.log('Error reading login template: ' + err.message);
+          return;
+        }
+        res.send(ejs.render(html, { phoneNumber: phoneNumber }));
+      });
+    } else {
+      res.sendFile(path.join(__dirname, './public/not-rec.html'));
+    }
+  });
+});
 
 app.listen(port, () =>
 {
-    console.log(`scheduler listening on port ${port}`)
+  console.log(`scheduler listening on port ${port}`);
 });
