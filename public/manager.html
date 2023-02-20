@@ -11,10 +11,10 @@
 <body>
     <div class="wrapper">
         <header>Enter your Phone Number</header>
-        <form action="/manager/try-login/" method="GET">
+        <form id="submit-phone" action="/manager/try-login/" method="GET">
           <div class="field SMS">
             <div class="input-area">
-              <input type="text" placeholder="SMS Number" name="SMS">
+              <input type="tel" placeholder="SMS Number" name="SMS" id="SMS">
               <i class="icon fas fa-envelope"></i>
               <i class="error error-icon fas fa-exclamation-circle"></i>
             </div>
@@ -24,6 +24,6 @@
         </form>
         <div class="sign-txt">Create manager account <a href="#">here</a></div>
       </div>
-    <script src="manager_script.js"></script>   
+    <script src="manager_script.js" defer></script>
 </body>
 </html>

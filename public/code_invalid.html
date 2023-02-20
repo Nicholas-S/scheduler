@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-    <title>Confirm your Phone Number</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <title>Incorrect Verification Code</title>
 </head>
 <body>
     <div class="wrapper">
-        <header>Please enter the verification code sent to <strong><%= phoneNumber %></strong></header>
+        <header>Incorrect verification code. Please try again.</header>
         <form action="/manager/do-login" method="POST">
             <input type="hidden" name="phoneNumber" value="<%= phoneNumber %>">
             <div class="field SMS">

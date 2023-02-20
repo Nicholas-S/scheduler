@@ -1,7 +1,6 @@
-const db = require('../db');
 const form = document.querySelector("form");
-cField = form.querySelector("SMS"),
-cInput = cField.querySelector("input"),
+cField = form.querySelector(".SMS");
+cInput = cField.querySelector("input");
 form.onsubmit = (c)=>
 {
   c.preventDefault();
@@ -17,7 +16,7 @@ form.onsubmit = (c)=>
   function checkNumber()
   {
     console.log("checked number");
-    let pattern = /^\d{10}$/;
+    let pattern = /^1?[2-9]\d{2}[2-9]\d{6}$/;
     if(!cInput.value.match(pattern))
     {
       cField.classList.add("error");
@@ -28,18 +27,9 @@ form.onsubmit = (c)=>
       cField.classList.remove("error");
       cField.classList.add("valid");
     }
-    /*let unique = db.checkManagerNum(cInput.value)
-    if(unique == 'valid')
-    {
-      cField.classList.remove("error");
-      cField.classList.add("valid");
-    } else {
-      cField.classList.remove("valid");
-      cField.classList.add("error");
-    }*/
   }
   if(!cField.classList.contains("error"))
   {
-    window.location.href = form.getAttribute("action");
+    window.location.href = `${form.getAttribute("action")}?SMS=${encodeURIComponent(cInput.value)}`;
   }
 }
