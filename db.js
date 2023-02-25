@@ -3,42 +3,51 @@ const mysql = require('mysql')
 const dbuser = 'schedule_handler'
 const dbpass = 'jW^71*01dZuy'
 
-const connection = mysql.createConnection(
+const connection = mysql.createPool(
 {
+    connectionLimit: 10,
     host: 'localhost',
     user: dbuser,
     password: dbpass,
     database: 'schedule_app'
-})
+});
 
-function testDbConnection()
+function getFirstName(phoneNumber)
 {
-    connection.connect((err) =>
+    let escapedPhoneNumber = mysql.escape(phoneNumber);
+    let sql = `SELECT first_name FROM managers WHERE cell = ?`
+    return new Promise((resolve, reject) =>
     {
-    if(err)
-    {
-        throw err;
-    } else {
-        console.log("MySQL DB Connected");
-    }
-    });
-}
-
-function checkManagerNum(number)
-{
-    connection.query('SELECT cell FROM managers', function(err, result, fields)
-    {
-        if(err) throw err; 
-        Object.keys(result).forEach(function(key)
+        connection.query(sql, [escapedPhoneNumber], (err, result) =>
         {
-            var cell = result[key];
-            if(cell == number)
+            if(err)
             {
-                return 'valid';
+                return reject(err);
             }
+            return resolve(JSON.parse(JSON.stringify(result))[0].first_name);
         });
     });
-    return 'error';
 }
-
-module.exports = { connection, testDbConnection, checkManagerNum };
+/*
+async function getFirstName(phoneNumber)
+{
+    let escapedPhoneNumber = mysql.escape(phoneNumber);
+    let sql = `SELECT first_name FROM managers WHERE cell = ?`
+    connection.query(sql, [escapedPhoneNumber],  (err, result) =>
+    {
+        if(err)
+        {
+            console.log('MySQL Error: ' + err.message);
+            return;
+        }
+        if(result.length > 0)
+        {
+            var returnName = JSON.parse(JSON.stringify(result));
+            return returnName[0].first_name;
+        } else {
+            return null;
+        }
+    });
+}
+*/
+module.exports = { connection , getFirstName };
